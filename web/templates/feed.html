@@ -1,0 +1,17 @@
+{% extends "_base.html" %}
+
+{% block content %}
+
+<div>
+  {% for item in twimages %}
+    {% if item['type'] == "img" %}
+      <img src="{{item['image']}}">
+    {% elif item['type'] == "video" %}
+      <video poster="{{item['image']}}" controls> <source src="{{item['content']}}" type="video/mp4"></video>
+    {% elif item['type'] == "tweet" %}
+      {{item['embed']|safe}}
+    {% endif %}
+    <p>{{item['desc']}}</p>
+  {%endfor%}
+</div>
+{% endblock %}
