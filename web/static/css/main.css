@@ -1,0 +1,18 @@
+/* custom styles */
+
+.container {
+  max-width: 500px;
+}
+
+nav {
+  margin-bottom: 50px;
+}
+
+.btn {
+  margin-top: 25px;
+}
+
+img {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
