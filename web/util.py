@@ -5,8 +5,10 @@ import subprocess
 import tweepy
 import requests
 
-auth = tweepy.OAuthHandler(os.environ['CONSUMER_KEY'], os.environ['CONSUMER_SECRET'])
-auth.set_access_token(os.environ['ACCESS_TOKEN'], os.environ['ACCESS_TOKEN_SECRET'])
+auth = tweepy.OAuthHandler(
+    os.environ['CONSUMER_KEY'], os.environ['CONSUMER_SECRET'])
+auth.set_access_token(os.environ['ACCESS_TOKEN'],
+                      os.environ['ACCESS_TOKEN_SECRET'])
 api = tweepy.API(auth)
 
 SCRAPY_SPIDERS = (
@@ -22,7 +24,6 @@ REFERENCE_DIR = os.path.join(
 )
 
 INITIAL_DIR = os.getcwd()
-
 
 
 def run_spider(spider_name: str):
@@ -68,11 +69,18 @@ def scrape_data():
     print("Scraping done. Changing back to initial directory.")
     os.chdir(INITIAL_DIR)
 
+
 def tweets():
+    """Collects oembed links and timestamps
+    of the newest posts on twice's timeline
+    and returns an array of dicts containing
+    type timestamp and oembedlink"""
     timeline = api.user_timeline("jypetwice")
     ids = [status.id_str for status in timeline]
-    links = [f"https://publish.twitter.com/oembed?url=https://twitter.com/JYPETWICE/status/{id}" for id in ids]
-    objects = [json.loads(requests.get(link).content) if requests.get(link).status_code == 200 else "<p>Embed not found</p>" for link in links]
+    links = [
+        f"https://publish.twitter.com/oembed?url=https://twitter.com/JYPETWICE/status/{id}" for id in ids]
+    objects = [json.loads(requests.get(link).content) if requests.get(
+        link).status_code == 200 else "<p>Embed not found</p>" for link in links]
     timestamps = [status.created_at for status in timeline]
     embeds = [obj['html'] for obj in objects]
     return [{"type": "tweet", "embed": embed, "timestamp": timestamp} for (embed, timestamp) in dict(zip(embeds, timestamps)).items()]
