@@ -1,2 +1,3 @@
 web/scraper/.scrapy/
 __pycache__
+.env
